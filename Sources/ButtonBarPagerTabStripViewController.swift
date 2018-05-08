@@ -40,6 +40,7 @@ public enum ButtonBarItemSpec<CellType: UICollectionViewCell> {
 }
 
 public struct ButtonBarPagerTabStripSettings {
+    public init() {}
 
     public struct Style {
         public var buttonBarBackgroundColor: UIColor?
