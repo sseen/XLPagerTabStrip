@@ -22,6 +22,10 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
     
     open private(set) var currentIndex = 0
     
+    lazy private var cachedCellWidths: [CGFloat]? = { [unowned self] in
+        return self.calculateWidths()
+        }()
+    
     var content = ["wheoweojr", "nihaodaoie", "hwoeo", "joadshoa", "hello", "bye"]
 
     open override func viewDidLoad() {
@@ -96,6 +100,71 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
         super.viewWillAppear(animated)
         buttonBarView.layoutIfNeeded()
     }
+    
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Force the UICollectionViewFlowLayout to get laid out again with the new size if
+        // a) The view is appearing.  This ensures that
+        //    collectionView:layout:sizeForItemAtIndexPath: is called for a second time
+        //    when the view is shown and when the view *frame(s)* are actually set
+        //    (we need the view frame's to have been set to work out the size's and on the
+        //    first call to collectionView:layout:sizeForItemAtIndexPath: the view frame(s)
+        //    aren't set correctly)
+        // b) The view is rotating.  This ensures that
+        //    collectionView:layout:sizeForItemAtIndexPath: is called again and can use the views
+        //    *new* frame so that the buttonBarView cell's actually get resized correctly
+        cachedCellWidths = calculateWidths()
+        buttonBarView.collectionViewLayout.invalidateLayout()
+        // When the view first appears or is rotated we also need to ensure that the barButtonView's
+        // selectedBar is resized and its contentOffset/scroll is set correctly (the selected
+        // tab/cell may end up either skewed or off screen after a rotation otherwise)
+        buttonBarView.moveTo(index: currentIndex, animated: false, swipeDirection: .none, pagerScroll: .scrollOnlyIfOutOfScreen)
+        buttonBarView.selectItem(at: IndexPath(item: currentIndex, section: 0), animated: false, scrollPosition: [])
+    }
+    
+    private func calculateWidths() -> [CGFloat] {
+        let flowLayout = buttonBarView.collectionViewLayout as! UICollectionViewFlowLayout // swiftlint:disable:this force_cast
+        let numberOfCells = viewControllers.count
+        
+        var minimumCellWidths = [CGFloat]()
+        var collectionViewContentWidth: CGFloat = 0
+        
+        for viewController in viewControllers {
+            let childController = viewController as! IndicatorInfoProvider // swiftlint:disable:this force_cast
+            let indicatorInfo = childController.indicatorInfo(for: self)
+            switch buttonBarItemSpec! {
+            case .cellClass(let widthCallback):
+                let width = widthCallback(indicatorInfo)
+                minimumCellWidths.append(width)
+                collectionViewContentWidth += width
+            case .nibFile(_, _, let widthCallback):
+                let width = widthCallback(indicatorInfo)
+                minimumCellWidths.append(width)
+                collectionViewContentWidth += width
+            }
+        }
+        
+        let cellSpacingTotal = CGFloat(numberOfCells - 1) * flowLayout.minimumLineSpacing
+        collectionViewContentWidth += cellSpacingTotal
+        
+        let collectionViewAvailableVisibleWidth = buttonBarView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right
+        
+        if !settings.style.buttonBarItemsShouldFillAvailableWidth || collectionViewAvailableVisibleWidth < collectionViewContentWidth {
+            return minimumCellWidths
+        } else {
+            let stretchedCellWidthIfAllEqual = (collectionViewAvailableVisibleWidth - cellSpacingTotal) / CGFloat(numberOfCells)
+            let generalMinimumCellWidth = calculateStretchedCellWidths(minimumCellWidths, suggestedStretchedCellWidth: stretchedCellWidthIfAllEqual, previousNumberOfLargeCells: 0)
+            var stretchedCellWidths = [CGFloat]()
+            
+            for minimumCellWidthValue in minimumCellWidths {
+                let cellWidth = (minimumCellWidthValue > generalMinimumCellWidth) ? minimumCellWidthValue : generalMinimumCellWidth
+                stretchedCellWidths.append(cellWidth)
+            }
+            
+            return stretchedCellWidths
+        }
+    }
 
     override open func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -114,7 +183,10 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
     */
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 44)
+        guard let cellWidthValue = cachedCellWidths?[indexPath.row] else {
+            fatalError("cachedCellWidths for \(indexPath.row) must not be nil")
+        }
+        return CGSize(width: cellWidthValue, height: collectionView.frame.size.height)
     }
     
     open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
