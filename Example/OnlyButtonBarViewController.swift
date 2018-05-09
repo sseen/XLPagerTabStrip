@@ -25,16 +25,9 @@ class OnlyButtonBarViewController: UIViewController, UICollectionViewDelegate, U
             return buttonBar
             }()
         buttonBarView = buttonBarViewAux
-        
-        if buttonBarView.superview == nil {
-            view.addSubview(buttonBarView)
-        }
-        if buttonBarView.delegate == nil {
-            buttonBarView.delegate = self
-        }
-        if buttonBarView.dataSource == nil {
-            buttonBarView.dataSource = self
-        }
+
+        buttonBarView.delegate = self
+        buttonBarView.dataSource = self
         
         self.view.addSubview(buttonBarView)
     }
@@ -57,6 +50,7 @@ class OnlyButtonBarViewController: UIViewController, UICollectionViewDelegate, U
         // When the view first appears or is rotated we also need to ensure that the barButtonView's
         // selectedBar is resized and its contentOffset/scroll is set correctly (the selected
         // tab/cell may end up either skewed or off screen after a rotation otherwise)
+        
         buttonBarView.moveTo(index: buttonBarView.currentIndex, animated: false, swipeDirection: .none, pagerScroll: .scrollOnlyIfOutOfScreen)
         buttonBarView.selectItem(at: IndexPath(item: buttonBarView.currentIndex, section: 0), animated: false, scrollPosition: [])
     }
