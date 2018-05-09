@@ -8,7 +8,7 @@
 import UIKit
 import XLPagerTabStrip
 
-open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     public var buttonBarView: ButtonBarView!
     //var settings = ButtonBarPagerTabStripSettings()
@@ -79,11 +79,6 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
         flowLayout.sectionInset = UIEdgeInsets(top: sectionInset.top, left: settings.style.buttonBarLeftContentInset ?? sectionInset.left, bottom: sectionInset.bottom, right: settings.style.buttonBarRightContentInset ?? sectionInset.right)
         
         buttonBarView.showsHorizontalScrollIndicator = false
-//        buttonBarView.backgroundColor = settings.style.buttonBarBackgroundColor ?? buttonBarView.backgroundColor
-//        buttonBarView.selectedBar.backgroundColor = settings.style.selectedBarBackgroundColor
-        
-        //buttonBarView.selectedBarHeight = settings.style.selectedBarHeight
-        //buttonBarView.selectedBarVerticalAlignment = settings.style.selectedBarVerticalAlignment
         
         // register button bar item cell
         switch buttonBarItemSpec! {
@@ -125,14 +120,13 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
     
     private func calculateWidths() -> [CGFloat] {
         let flowLayout = buttonBarView.collectionViewLayout as! UICollectionViewFlowLayout // swiftlint:disable:this force_cast
-        let numberOfCells = viewControllers.count
+        let numberOfCells = content.count
         
         var minimumCellWidths = [CGFloat]()
         var collectionViewContentWidth: CGFloat = 0
         
-        for viewController in viewControllers {
-            let childController = viewController as! IndicatorInfoProvider // swiftlint:disable:this force_cast
-            let indicatorInfo = childController.indicatorInfo(for: self)
+        for viewController in content {
+            let indicatorInfo = IndicatorInfo(title: viewController)
             switch buttonBarItemSpec! {
             case .cellClass(let widthCallback):
                 let width = widthCallback(indicatorInfo)
@@ -171,6 +165,28 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
     
+    open func calculateStretchedCellWidths(_ minimumCellWidths: [CGFloat], suggestedStretchedCellWidth: CGFloat, previousNumberOfLargeCells: Int) -> CGFloat {
+        var numberOfLargeCells = 0
+        var totalWidthOfLargeCells: CGFloat = 0
+        
+        for minimumCellWidthValue in minimumCellWidths where minimumCellWidthValue > suggestedStretchedCellWidth {
+            totalWidthOfLargeCells += minimumCellWidthValue
+            numberOfLargeCells += 1
+        }
+        
+        guard numberOfLargeCells > previousNumberOfLargeCells else { return suggestedStretchedCellWidth }
+        
+        let flowLayout = buttonBarView.collectionViewLayout as! UICollectionViewFlowLayout // swiftlint:disable:this force_cast
+        let collectionViewAvailiableWidth = buttonBarView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right
+        let numberOfCells = minimumCellWidths.count
+        let cellSpacingTotal = CGFloat(numberOfCells - 1) * flowLayout.minimumLineSpacing
+        
+        let numberOfSmallCells = numberOfCells - numberOfLargeCells
+        let newSuggestedStretchedCellWidth = (collectionViewAvailiableWidth - totalWidthOfLargeCells - cellSpacingTotal) / CGFloat(numberOfSmallCells)
+        
+        return calculateStretchedCellWidths(minimumCellWidths, suggestedStretchedCellWidth: newSuggestedStretchedCellWidth, previousNumberOfLargeCells: numberOfLargeCells)
+    }
+    
 
     /*
     // MARK: - Navigation
@@ -182,7 +198,10 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
     }
     */
     
-    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    
+    
+    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         guard let cellWidthValue = cachedCellWidths?[indexPath.row] else {
             fatalError("cachedCellWidths for \(indexPath.row) must not be nil")
         }
@@ -279,6 +298,9 @@ open class OnlyBarViewController: UIViewController, UICollectionViewDelegate, UI
         return cells
     }
     
+    @IBAction func ckBack(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
     //private var shouldUpdateButtonBarView = true
 
 }

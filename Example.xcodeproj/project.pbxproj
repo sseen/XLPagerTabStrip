@@ -23,6 +23,8 @@
 		287D0A7E1C4B7B55004566D6 /* XLPagerTabStrip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 287D0A7A1C4B7B26004566D6 /* XLPagerTabStrip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F828CF1C4B714D00330CF4 /* AppDelegate.swift */; };
 		92269B8B20A18EAE005D9CD5 /* OnlyBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269B8A20A18EAE005D9CD5 /* OnlyBarViewController.swift */; };
+		92269B8E20A291F9005D9CD5 /* OnlyButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269B8D20A291F9005D9CD5 /* OnlyButtonBarView.swift */; };
+		92269B9020A29501005D9CD5 /* OnlyButtonBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92269B8F20A29501005D9CD5 /* OnlyButtonBarViewController.swift */; };
 		CB2125DE1C52A80E002DAF42 /* TwitterExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2125DD1C52A80E002DAF42 /* TwitterExampleViewController.swift */; };
 		CB3697BF1C5177B4001FC5F8 /* ButtonBarExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3697BE1C5177B4001FC5F8 /* ButtonBarExampleViewController.swift */; };
 		CB71C6EB1C4EB964008EC806 /* SegmentedExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB71C6EA1C4EB964008EC806 /* SegmentedExampleViewController.swift */; };
@@ -101,6 +103,8 @@
 		28F828E01C4B714D00330CF4 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F828E61C4B714D00330CF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Example/ExampleUITests/Info.plist; sourceTree = "<group>"; };
 		92269B8A20A18EAE005D9CD5 /* OnlyBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlyBarViewController.swift; sourceTree = "<group>"; };
+		92269B8D20A291F9005D9CD5 /* OnlyButtonBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlyButtonBarView.swift; sourceTree = "<group>"; };
+		92269B8F20A29501005D9CD5 /* OnlyButtonBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlyButtonBarViewController.swift; sourceTree = "<group>"; };
 		CB2125DD1C52A80E002DAF42 /* TwitterExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TwitterExampleViewController.swift; path = Example/TwitterExampleViewController.swift; sourceTree = "<group>"; };
 		CB3697BE1C5177B4001FC5F8 /* ButtonBarExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ButtonBarExampleViewController.swift; path = Example/Example/ButtonBarExampleViewController.swift; sourceTree = SOURCE_ROOT; };
 		CB71C6EA1C4EB964008EC806 /* SegmentedExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedExampleViewController.swift; path = Example/SegmentedExampleViewController.swift; sourceTree = "<group>"; };
@@ -255,6 +259,8 @@
 				CBBD435E1C5274AE001A748E /* NavButtonBarExampleViewController.swift */,
 				CB2125DD1C52A80E002DAF42 /* TwitterExampleViewController.swift */,
 				92269B8A20A18EAE005D9CD5 /* OnlyBarViewController.swift */,
+				92269B8D20A291F9005D9CD5 /* OnlyButtonBarView.swift */,
+				92269B8F20A29501005D9CD5 /* OnlyButtonBarViewController.swift */,
 			);
 			name = Demo;
 			sourceTree = "<group>";
@@ -404,6 +410,8 @@
 				28F828D01C4B714D00330CF4 /* AppDelegate.swift in Sources */,
 				CBA0A2041C5033B400C5748C /* ReloadExampleViewController.swift in Sources */,
 				285DA2901C59C587000908CA /* SpotifyExampleViewController.swift in Sources */,
+				92269B8E20A291F9005D9CD5 /* OnlyButtonBarView.swift in Sources */,
+				92269B9020A29501005D9CD5 /* OnlyButtonBarViewController.swift in Sources */,
 				CB3697BF1C5177B4001FC5F8 /* ButtonBarExampleViewController.swift in Sources */,
 				285DA2881C569AA2000908CA /* ChildExampleViewController.swift in Sources */,
 				CBA0A1FF1C50304500C5748C /* BarExampleViewController.swift in Sources */,

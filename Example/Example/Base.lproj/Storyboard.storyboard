@@ -368,6 +368,26 @@
                                             <segue destination="lyP-YS-9tv" kind="show" id="zTB-wz-PgU"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="mah-1f-xY9" style="IBUITableViewCellStyleDefault" id="dDb-Lh-Plz">
+                                        <rect key="frame" x="0.0" y="335" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dDb-Lh-Plz" id="Dvu-Zh-40J">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="only bar button Example" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mah-1f-xY9">
+                                                    <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="7PM-Bx-8a4" kind="show" id="99a-PF-NSj"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -393,12 +413,25 @@
                     <view key="view" contentMode="scaleToFill" id="hk7-vV-AaQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1TW-RK-dcm">
+                                <rect key="frame" x="16" y="608" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="ckBack:" destination="lyP-YS-9tv" eventType="touchUpInside" id="hbA-Ts-OgG"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="1TW-RK-dcm" firstAttribute="leading" secondItem="hk7-vV-AaQ" secondAttribute="leading" constant="16" id="uBi-SC-XeC"/>
+                            <constraint firstItem="r8s-lO-0pP" firstAttribute="top" secondItem="1TW-RK-dcm" secondAttribute="bottom" constant="29" id="uGG-uC-GeV"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="75i-i9-J2l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1276" y="481"/>
+            <point key="canvasLocation" x="-1340" y="514"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Lv9-yU-Knu">
@@ -1054,6 +1087,37 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Loe-25-w2Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="518" y="-3067"/>
+        </scene>
+        <!--Only Button Bar View Controller-->
+        <scene sceneID="BiQ-AM-B3i">
+            <objects>
+                <viewController id="7PM-Bx-8a4" customClass="OnlyButtonBarViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eYC-Fg-Gbb"/>
+                        <viewControllerLayoutGuide type="bottom" id="mMX-8k-rdH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UBv-Av-CqV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTP-T9-far">
+                                <rect key="frame" x="16" y="608" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="ckBack:" destination="7PM-Bx-8a4" eventType="touchUpInside" id="cYf-yH-0hX"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="mMX-8k-rdH" firstAttribute="top" secondItem="BTP-T9-far" secondAttribute="bottom" constant="29" id="BeT-cH-IEL"/>
+                            <constraint firstItem="BTP-T9-far" firstAttribute="leading" secondItem="UBv-Av-CqV" secondAttribute="leading" constant="16" id="Em1-uB-9rR"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z35-Me-AMA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-622" y="514"/>
         </scene>
     </scenes>
     <resources>
