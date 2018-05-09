@@ -24,10 +24,37 @@ class OnlyButtonBarView: ButtonBarView {
         return self.calculateWidths()
         }()
     
-    public var content = ["wheoweojr", "nihaodaoie", "hwoeo", "joadshoa", "hello", "bye"]
+    public var content = ["wheoweojr"]
     
     public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
+        myParas()
+    }
+    
+    init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout?, content:[String]?) {
+        
+        if let contents = content {
+            self.content = contents
+        }
+        
+        if let layouts = layout {
+            super.init(frame: frame, collectionViewLayout: layouts)
+        } else {
+            let myLayout = UICollectionViewFlowLayout()
+            myLayout.scrollDirection = .horizontal
+            
+            super.init(frame: frame, collectionViewLayout: myLayout)
+            
+        }
+        
+        myParas()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func myParas() {
         
         var bundle = Bundle(for: ButtonBarViewCell.self)
         if let resourcePath = bundle.path(forResource: "XLPagerTabStrip", ofType: "bundle") {
@@ -45,10 +72,32 @@ class OnlyButtonBarView: ButtonBarView {
             return labelSize.width + (self?.settings.style.buttonBarItemLeftRightMargin ?? 8) * 2
         })
         
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        
+        self.selectedBar.backgroundColor = UIColor(red:0.00, green:0.62, blue:0.93, alpha:1.00)
+        self.backgroundColor = UIColor.white
+        // cell title color bg color
+        self.settings.style.buttonBarItemBackgroundColor = UIColor.white
+        self.settings.style.buttonBarItemTitleColor = UIColor(red:0.133, green:0.133, blue:0.133, alpha:1)
+        self.autoresizingMask = .flexibleWidth
+        
+        self.scrollsToTop = false
+        let flowLayout = self.collectionViewLayout as! UICollectionViewFlowLayout // swiftlint:disable:this force_cast
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumInteritemSpacing = self.settings.style.buttonBarMinimumInteritemSpacing ?? flowLayout.minimumInteritemSpacing
+        flowLayout.minimumLineSpacing = self.settings.style.buttonBarMinimumLineSpacing ?? flowLayout.minimumLineSpacing
+        let sectionInset = flowLayout.sectionInset
+        flowLayout.sectionInset = UIEdgeInsets(top: sectionInset.top, left: self.settings.style.buttonBarLeftContentInset ?? sectionInset.left, bottom: sectionInset.bottom, right: self.settings.style.buttonBarRightContentInset ?? sectionInset.right)
+        
+        self.showsHorizontalScrollIndicator = false
+        
+        // register button bar item cell
+        switch self.buttonBarItemSpec! {
+        case .nibFile(let nibName, let bundle, _):
+            self.register(UINib(nibName: nibName, bundle: bundle), forCellWithReuseIdentifier:"Cell")
+        case .cellClass:
+            self.register(ButtonBarViewCell.self, forCellWithReuseIdentifier:"Cell")
+        }
+        
     }
     
 

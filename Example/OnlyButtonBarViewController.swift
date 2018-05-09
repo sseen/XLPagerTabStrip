@@ -19,13 +19,8 @@ class OnlyButtonBarViewController: UIViewController, UICollectionViewDelegate, U
         // Do any additional setup after loading the view.
         
         let buttonBarViewAux = buttonBarView ?? {
-            let flowLayout = UICollectionViewFlowLayout()
-            flowLayout.scrollDirection = .horizontal
             let buttonBarHeight = 44
-            let buttonBar = OnlyButtonBarView(frame: CGRect(x: 0, y: 0, width: Int(view.frame.size.width), height: buttonBarHeight), collectionViewLayout: flowLayout)
-            buttonBar.selectedBar.backgroundColor = .orange
-            buttonBar.backgroundColor = UIColor(red: 7/255, green: 185/255, blue: 155/255, alpha: 1)
-            buttonBar.autoresizingMask = .flexibleWidth
+            let buttonBar = OnlyButtonBarView(frame: CGRect(x: 0, y: 0, width: Int(view.frame.size.width), height: buttonBarHeight), collectionViewLayout: nil, content: content)
             
             return buttonBar
             }()
@@ -40,30 +35,30 @@ class OnlyButtonBarViewController: UIViewController, UICollectionViewDelegate, U
         if buttonBarView.dataSource == nil {
             buttonBarView.dataSource = self
         }
-        buttonBarView.scrollsToTop = false
-        let flowLayout = buttonBarView.collectionViewLayout as! UICollectionViewFlowLayout // swiftlint:disable:this force_cast
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumInteritemSpacing = buttonBarView.settings.style.buttonBarMinimumInteritemSpacing ?? flowLayout.minimumInteritemSpacing
-        flowLayout.minimumLineSpacing = buttonBarView.settings.style.buttonBarMinimumLineSpacing ?? flowLayout.minimumLineSpacing
-        let sectionInset = flowLayout.sectionInset
-        flowLayout.sectionInset = UIEdgeInsets(top: sectionInset.top, left: buttonBarView.settings.style.buttonBarLeftContentInset ?? sectionInset.left, bottom: sectionInset.bottom, right: buttonBarView.settings.style.buttonBarRightContentInset ?? sectionInset.right)
-        
-        buttonBarView.showsHorizontalScrollIndicator = false
-        
-        // register button bar item cell
-        switch buttonBarView.buttonBarItemSpec! {
-        case .nibFile(let nibName, let bundle, _):
-            buttonBarView.register(UINib(nibName: nibName, bundle: bundle), forCellWithReuseIdentifier:"Cell")
-        case .cellClass:
-            buttonBarView.register(ButtonBarViewCell.self, forCellWithReuseIdentifier:"Cell")
-        }
         
         self.view.addSubview(buttonBarView)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Force the UICollectionViewFlowLayout to get laid out again with the new size if
+        // a) The view is appearing.  This ensures that
+        //    collectionView:layout:sizeForItemAtIndexPath: is called for a second time
+        //    when the view is shown and when the view *frame(s)* are actually set
+        //    (we need the view frame's to have been set to work out the size's and on the
+        //    first call to collectionView:layout:sizeForItemAtIndexPath: the view frame(s)
+        //    aren't set correctly)
+        // b) The view is rotating.  This ensures that
+        //    collectionView:layout:sizeForItemAtIndexPath: is called again and can use the views
+        //    *new* frame so that the buttonBarView cell's actually get resized correctly
+//        cachedCellWidths = calculateWidths()
+//        buttonBarView.collectionViewLayout.invalidateLayout()
+        // When the view first appears or is rotated we also need to ensure that the barButtonView's
+        // selectedBar is resized and its contentOffset/scroll is set correctly (the selected
+        // tab/cell may end up either skewed or off screen after a rotation otherwise)
+        buttonBarView.moveTo(index: buttonBarView.currentIndex, animated: false, swipeDirection: .none, pagerScroll: .scrollOnlyIfOutOfScreen)
+        buttonBarView.selectItem(at: IndexPath(item: buttonBarView.currentIndex, section: 0), animated: false, scrollPosition: [])
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
